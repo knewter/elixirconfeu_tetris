@@ -1,11 +1,5 @@
 import {Socket} from "phoenix"
 
-let socket = new Socket("/ws")
-socket.connect()
-socket.join("game:play", {}).receive("ok", chan => {
-  console.log("Got into the channel.")
-})
-
 
 let canvas = document.getElementById("canvas")
 let context = canvas.getContext("2d")
@@ -13,38 +7,17 @@ let context = canvas.getContext("2d")
 let nextFrameInitialX = 12
 let nextFrameInitialY = 0
 
+let socket = new Socket("/ws")
+socket.connect()
+socket.join("game:play", {}).receive("ok", chan => {
+  console.log("Got into the channel.")
+  chan.on("tetris:state", payload => {
+    console.log(payload)
+    App.draw(context, payload)
+  })
+})
+
 let App = {
-  runTetris: function(){
-    let state = {
-      board: [
-        [0,0,0,0,1,0,0,0,0,0],
-        [0,0,0,0,1,0,0,0,0,0],
-        [0,0,0,0,1,1,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0]
-      ],
-      next: [
-        [1, 0],
-        [1, 0],
-        [1, 1]
-      ]
-    }
-    this.draw(context, state)
-  },
   draw: function(context, state){
     this.drawBoard(context, state.board)
     this.drawNext(context, state.next)
@@ -131,6 +104,34 @@ let App = {
   }
 }
 
-App.runTetris()
+let state = {
+  board: [
+    [0,0,0,0,1,0,0,0,0,0],
+    [0,0,0,0,1,0,0,0,0,0],
+    [0,0,0,0,1,1,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0]
+  ],
+  next: [
+    [1, 0],
+    [1, 0],
+    [1, 1]
+  ]
+}
+//App.draw(context, state)
 
 export default App
