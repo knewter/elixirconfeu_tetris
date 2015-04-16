@@ -1,45 +1,18 @@
 defmodule Tetris.Websocket do
   @render_interval 100
 
-  def run(socket) do
+  def run(game, socket) do
     :timer.send_interval(@render_interval, self, :tick)
-    loop(socket)
+    loop(game, socket)
   end
 
-  def loop(socket) do
+  def loop(game, socket) do
     receive do
       :tick ->
         IO.puts "tick"
-        Phoenix.Channel.push socket, "tetris:state", %{
-          board: [
-            [0,0,0,0,1,0,0,0,0,0],
-            [0,0,0,0,1,0,0,0,0,0],
-            [0,0,0,0,1,1,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0]
-          ],
-          next: [
-            [1, 0],
-            [1, 0],
-            [1, 1]
-          ]
-        }
+        Phoenix.Channel.push socket, "tetris:state", Tetris.Game.get_state(game)
       _ -> :ok
     end
-    loop(socket)
+    loop(game, socket)
   end
 end

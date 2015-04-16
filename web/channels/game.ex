@@ -7,7 +7,8 @@ defmodule Tetris.GameChannel do
   end
 
   def handle_info(:after_join, socket) do
-    spawn(fn() -> Tetris.Websocket.run(socket) end)
+    {:ok, game} = Tetris.Game.start
+    spawn(fn() -> Tetris.Websocket.run(game, socket) end)
     {:noreply, socket}
   end
 end
