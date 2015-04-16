@@ -1,6 +1,10 @@
 defmodule Tetris.Router do
   use Phoenix.Router
 
+  socket "/ws", Tetris do
+    channel "game:*", GameChannel
+  end
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session

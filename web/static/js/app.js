@@ -1,9 +1,10 @@
 import {Socket} from "phoenix"
 
-// let socket = new Socket("/ws")
-// socket.connect()
-// socket.join("topic:subtopic", {}).receive("ok", chan => {
-// })
+let socket = new Socket("/ws")
+socket.connect()
+socket.join("game:play", {}).receive("ok", chan => {
+  console.log("Got into the channel.")
+})
 
 
 let canvas = document.getElementById("canvas")
