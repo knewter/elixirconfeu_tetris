@@ -1,5 +1,6 @@
 defmodule Tetris.Game do
   use GenServer
+  alias Tetris.Shapes
 
   defmodule State do
     defstruct [:board, :next]
@@ -38,11 +39,7 @@ defmodule Tetris.Game do
                [0,0,0,0,0,0,0,0,0,0],
                [0,0,0,0,0,0,0,0,0,0]
              ],
-             next: [
-               [1, 0],
-               [1, 0],
-               [1, 1]
-             ]
+             next: :ell
            }
     }
   end
@@ -50,7 +47,7 @@ defmodule Tetris.Game do
   def handle_call(:get_state, _from, state) do
     reply_state = %{
       board: state.board,
-      next: state.next
+      next: Shapes.get(state.next, 0)
     }
     {:reply, reply_state, state}
   end
