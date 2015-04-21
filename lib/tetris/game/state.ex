@@ -12,4 +12,10 @@ defmodule Tetris.Game.State do
       end
     end |> List.flatten
   end
+
+  def cell_at(state, {x, y}) do
+    state.board
+    |> Enum.at(y)
+    |> Enum.at(x)
+  end
 end
