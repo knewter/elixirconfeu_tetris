@@ -25,6 +25,9 @@ socket.join("game:play", {}).receive("ok", chan => {
       case "Right":
       case "ArrowRight":
         return "move_right"
+      case "Up":
+      case "ArrowUp":
+        return "rotate_cw"
       default:
         console.log(key)
         return "noop"

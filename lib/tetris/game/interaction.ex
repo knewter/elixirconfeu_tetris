@@ -11,5 +11,8 @@ defmodule Tetris.Game.Interaction do
   def do_handle_input(state, :move_left) do
     %State{state | x: state.x - 1}
   end
+  def do_handle_input(state, :rotate_cw) do
+    %State{state | rotation: rem(state.rotation + 1, 4)}
+  end
   def do_handle_input(state, _), do: state
 end
