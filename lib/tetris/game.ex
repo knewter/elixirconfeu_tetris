@@ -3,9 +3,13 @@ defmodule Tetris.Game do
   alias Tetris.Shapes
   alias Tetris.Game.State
 
+  @game_tick 500
+
   ## Public API
   def start do
     {:ok, pid} = GenServer.start(__MODULE__, [])
+    :timer.send_interval(@game_tick, pid, :tick)
+    {:ok, pid}
   end
 
   def get_state(pid) do
@@ -51,6 +55,11 @@ defmodule Tetris.Game do
       next: Shapes.get(state.next, 0)
     }
     {:reply, reply_state, state}
+  end
+
+  def handle_info(:tick, state) do
+    IO.inspect "game tick"
+    {:noreply, %State{state | y: state.y + 1}}
   end
 
   def board_with_overlaid_shape(%State{} = state) do

@@ -4,7 +4,7 @@ import {Socket} from "phoenix"
 let canvas = document.getElementById("canvas")
 let context = canvas.getContext("2d")
 
-let nextFrameInitialX = 12
+let nextFrameInitialX = 14
 let nextFrameInitialY = 0
 
 let socket = new Socket("/ws")
@@ -24,7 +24,7 @@ let App = {
   },
   drawBoard: function(context, board){
     this.drawFrame(context, board)
-    this.drawPixelArray(context, board, 0, 0)
+    this.drawPixelArray(context, board, 1, 0)
   },
   drawNext: function(context, next){
     this.drawNextPiece(context, next)
@@ -33,12 +33,15 @@ let App = {
     for(let i = 0; i < pixelArray.length; i++) {
       for(let j = 0; j < pixelArray[0].length; j++) {
         let col = pixelArray[i][j]
+        let brush;
         switch(col){
           case 0:
+            brush = this.brushFor("background")
             break;
           default:
-            this.drawSquare(context, initialX + j, initialY + i, this.brushFor(this.shapeName(col)))
+            brush = this.brushFor(this.shapeName(col))
         }
+        this.drawSquare(context, initialX + j, initialY + i, brush)
       }
     }
   },
@@ -49,12 +52,12 @@ let App = {
     let brush = this.brushFor("board")
     let boardWidth = board[0].length
     let boardHeight = board.length
-    for(let x = 0; x <= boardWidth; x++) {
+    for(let x = 0; x <= boardWidth+1; x++) {
       this.drawSquare(context, x, boardHeight, brush)
     }
     for(let y = 0; y < boardHeight; y++){
       this.drawSquare(context, 0, y, brush)
-      this.drawSquare(context, boardWidth, y, brush)
+      this.drawSquare(context, boardWidth+1, y, brush)
     }
   },
   drawSquare: function(context, x, y, brush){
@@ -68,6 +71,8 @@ let App = {
     switch(type){
       case "board":
         return "rgb(0,0,0)"
+      case "background":
+        return "rgb(255, 255, 255)"
       case "ell":
         return "rgb(255, 150, 0)"
       case "jay":
