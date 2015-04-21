@@ -16,9 +16,25 @@ socket.join("game:play", {}).receive("ok", chan => {
     App.draw(context, payload)
   })
 
+  function gameEventFor(evt){
+    let key = evt.keyIdentifier || evt.key
+    switch(key){
+      case "Left":
+      case "ArrowLeft":
+        return "move_left"
+      case "Right":
+      case "ArrowRight":
+        return "move_right"
+      default:
+        console.log(key)
+        return "noop"
+    }
+
+  }
+
   window.onkeyup = function(e){
     e.preventDefault()
-    chan.push("event", { event: "move_right" })
+    chan.push("event", { event: gameEventFor(e) })
   }
 })
 

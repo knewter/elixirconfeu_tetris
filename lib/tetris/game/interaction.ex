@@ -9,7 +9,7 @@ defmodule Tetris.Game.Interaction do
     %State{state | x: state.x + 1}
   end
   def do_handle_input(state, :move_left) do
-    %State{state | x: state.x + 1}
+    %State{state | x: state.x - 1}
   end
   def do_handle_input(state, _), do: state
 end
