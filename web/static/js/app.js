@@ -15,6 +15,11 @@ socket.join("game:play", {}).receive("ok", chan => {
     console.log(payload)
     App.draw(context, payload)
   })
+
+  window.onkeyup = function(e){
+    e.preventDefault()
+    chan.push("event", { event: "move_right" })
+  }
 })
 
 let App = {
