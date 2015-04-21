@@ -51,7 +51,17 @@ let App = {
     this.drawPixelArray(context, board, 1, 0)
   },
   drawNext: function(context, next){
+    this.clearNext(context)
     this.drawNextPiece(context, next)
+  },
+  clearNext: function(context){
+    let emptyNext = [
+      [0,0,0,0],
+      [0,0,0,0],
+      [0,0,0,0],
+      [0,0,0,0]
+    ]
+    this.drawPixelArray(context, emptyNext, nextFrameInitialX, nextFrameInitialY)
   },
   drawPixelArray: function(context, pixelArray, initialX, initialY){
     for(let i = 0; i < pixelArray.length; i++) {

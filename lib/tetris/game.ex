@@ -43,6 +43,7 @@ defmodule Tetris.Game do
                [0,0,0,0,0,0,0,0,0,0],
                [0,0,0,0,0,0,0,0,0,0],
                [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
                [0,0,0,0,0,0,0,0,0,0]
              ],
              next: :ell,
@@ -68,7 +69,7 @@ defmodule Tetris.Game do
 
   def handle_info(:tick, state) do
     IO.inspect "game tick"
-    {:noreply, %State{state | y: state.y + 1}}
+    {:noreply, tick_game(state)}
   end
 
   def board_with_overlaid_shape(%State{} = state) do
@@ -81,5 +82,19 @@ defmodule Tetris.Game do
         end
       end
     end
+  end
+
+  def tick_game(state) do
+    cond do
+      collision_with_bottom?(state) ->
+        new_state = %State{state | board: board_with_overlaid_shape(state) }
+        %State{new_state | current: state.next, x: 5, y: 0, next: Shapes.random}
+      :else ->
+        %State{state | y: state.y + 1}
+    end
+  end
+
+  def collision_with_bottom?(state) do
+    Shapes.height(state.current, state.rotation) + state.y > 19
   end
 end
