@@ -1,8 +1,13 @@
 defmodule Tetris.Game.Interaction do
   alias Tetris.Game.State
+  alias Tetris.Shapes
 
   def handle_input(original_state, event) do
-    do_handle_input(original_state, event)
+    new_state = do_handle_input(original_state, event)
+    cond do
+      valid?(new_state) -> new_state
+      :else             -> original_state
+    end
   end
 
   def do_handle_input(state, :move_right) do
@@ -15,4 +20,14 @@ defmodule Tetris.Game.Interaction do
     %State{state | rotation: rem(state.rotation + 1, 4)}
   end
   def do_handle_input(state, _), do: state
+
+  def valid?(%State{x: x}) when x < 0, do: false
+  def valid?(%State{}=state) do
+    !past_right_side_of_board?(state)
+  end
+
+  def past_right_side_of_board?(state) do
+    width = Shapes.width(state.current, state.rotation)
+    state.x + width >= 11
+  end
 end
