@@ -8,7 +8,6 @@ defmodule Tetris.Game do
 
   ## Public API
   def start do
-    :random.seed(:erlang.now)
     {:ok, pid} = GenServer.start(__MODULE__, [])
     :timer.send_interval(@game_tick, pid, :tick)
     {:ok, pid}
@@ -24,6 +23,7 @@ defmodule Tetris.Game do
 
   ## Server callbacks
   def init(_args) do
+    :random.seed(:erlang.now)
     {:ok, %State{
              board: [
                [0,0,0,0,0,0,0,0,0,0],
