@@ -59,7 +59,7 @@ defmodule Tetris.Game do
   def handle_call(:get_state, _from, state) do
     reply_state = %{
       board: board_with_overlaid_shape(state),
-      next: Shapes.get(state.next, 0)
+      next: Shapes.get(state.next, 0) |> colorize(state.next)
     }
     {:reply, reply_state, state}
   end
@@ -104,5 +104,13 @@ defmodule Tetris.Game do
     Enum.any?(next_coords, fn(coords) ->
       State.cell_at(state, coords) != 0
     end)
+  end
+
+  def colorize(shape_list, name) do
+    for row <- shape_list do
+      for col <- row do
+        col * Shapes.number(name)
+      end
+    end
   end
 end
