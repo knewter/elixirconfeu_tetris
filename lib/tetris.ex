@@ -18,6 +18,7 @@ defmodule Tetris do
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Tetris.Supervisor]
+    start_game
     Supervisor.start_link(children, opts)
   end
 
@@ -26,5 +27,15 @@ defmodule Tetris do
   def config_change(changed, _new, removed) do
     Tetris.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  def restart_game do
+    Process.unregister(:game)
+    start_game
+  end
+
+  def start_game do
+    {:ok, game} = Tetris.Game.start
+    Process.register(game, :game)
   end
 end
