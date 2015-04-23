@@ -89,7 +89,7 @@ defmodule Tetris.Game do
       collision_with_bottom?(state) || collision_with_board?(state) ->
         new_state = %State{state | board: board_with_overlaid_shape(state) }
         cleared_state = State.clear_lines(new_state)
-        %State{cleared_state | current: state.next, x: 5, y: 0, next: Shapes.random}
+        %State{cleared_state | current: state.next, x: 5, y: 0, next: Shapes.random, rotation: 0}
       :else ->
         %State{state | y: state.y + 1}
     end
