@@ -23,7 +23,14 @@ defmodule Tetris.Game.Interaction do
 
   def valid?(%State{x: x}) when x < 0, do: false
   def valid?(%State{}=state) do
-    !past_right_side_of_board?(state)
+    !past_right_side_of_board?(state) &&
+    !collision_with_board?(state)
+  end
+
+  def collision_with_board?(state) do
+    Enum.any?(State.cells_for_shape(state), fn(coords) ->
+      State.cell_at(state, coords) != 0
+    end)
   end
 
   def past_right_side_of_board?(state) do
