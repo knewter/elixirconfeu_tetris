@@ -69,7 +69,6 @@ defmodule Tetris.Game do
   end
 
   def handle_info(:tick, state) do
-    IO.inspect "game tick"
     {:noreply, tick_game(state)}
   end
 
@@ -89,7 +88,8 @@ defmodule Tetris.Game do
     cond do
       collision_with_bottom?(state) || collision_with_board?(state) ->
         new_state = %State{state | board: board_with_overlaid_shape(state) }
-        %State{new_state | current: state.next, x: 5, y: 0, next: Shapes.random}
+        cleared_state = State.clear_lines(new_state)
+        %State{cleared_state | current: state.next, x: 5, y: 0, next: Shapes.random}
       :else ->
         %State{state | y: state.y + 1}
     end
